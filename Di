@@ -1,0 +1,19 @@
+function f=Di(geom,i,m,nGauss,track,sigma)
+x=i-m+1;
+if strcmp(geom,'cyl')
+    if sigma(i)~=0
+        f=Lx(x,m,nGauss,track)/sigma(i)-1/sigma(i)^2 ...
+            *(akin(3,0)-akin(3,sigma(i)*Lx(x,m,nGauss,track)));
+    else
+        f=pi*Lx(x,m,nGauss,track)^2/4;
+    end
+elseif strcmp(geom,'sph')
+    if sigma(i)~=0
+        f=Lx(x,m,nGauss,track)/sigma(i)-1/sigma(i)^2 ...
+            *(1-exp(-(sigma(i)*Lx(x,m,nGauss,track))));
+    else
+        f=Lx(x,m,nGauss,track)^2/2;
+    end
+else
+    error('Undefined geometry!');
+end
