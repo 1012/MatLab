@@ -1,0 +1,9 @@
+function f=Rii(i,m,sign,sigma,vol,Lcell)
+if (sigma(i)~=0)
+    f=sign*vol(i)*taben(2,m*Lcell)/sigma(i)-1/(sigma(i))^2 ...
+        *(taben(3,m*Lcell)-taben(3,m*Lcell+sign*L(i-1/2,i+1/2,sigma,vol)));
+elseif (m~=0)
+    f=taben(1,m*Lcell)*(vol(i))^2/2;
+else
+    f=Inf;
+end
