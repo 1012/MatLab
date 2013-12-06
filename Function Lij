@@ -1,0 +1,36 @@
+function f=Lij(geom,track,sigma,vol,nGauss)
+n=length(vol);
+for i=1:n
+    tmp1=0;
+    tmp2=0;
+    for k=1:nGauss
+        if i>1
+            for m=1:i-1
+                tmp1=tmp1+track{m,k}{1}*(2*Di(geom,i,m,k,track,sigma) ...
+                    +Cij(geom,tau(i,i,m,k,track,sigma),i,i,m,k,track,sigma));
+            end
+        end
+        tmp2=tmp2+track{i,k}{1}*Di(geom,i,i,k,track,sigma);
+    end
+    f(i,i)=1/vol(i)*(tmp1+tmp2);
+    for j=i+1:n
+        tmp1=0;
+        tmp2=0;
+        for k=1:nGauss
+            if i>1
+                for m=1:i-1
+                    x=i-m+1;
+                    tmp1=tmp1+track{m,k}{1} ...
+                        *(Cij(geom,tau(i,j,m,k,track,sigma) ...
+                        +tau(i,i,m,k,track,sigma)+sigma(i) ...
+                        *track{m,k}{3}(x),i,j,m,k,track,sigma)+...
+                        Cij(geom,tau(i,j,m,k,track,sigma),i,j,m,k,track,sigma));
+                end
+            end
+            tmp2=tmp2+track{i,k}{1} ...
+                *Cij(geom,tau(i,j,i,k,track,sigma),i,j,i,k,track,sigma);
+        end
+        f(i,j)=1/vol(i)*(tmp1+tmp2);
+        f(j,i)=vol(i)/vol(j)*f(i,j);
+    end
+end
