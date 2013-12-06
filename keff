@@ -1,0 +1,11 @@
+function f=keff(pij,vol,nusigmaf,sigmas,ref)
+n=length(vol);
+for i=1:n
+    for j=1:n
+        SQ(i,j)=sigmas(j)*vol(j)*pij(j,i)/vol(i);
+        FQ(i,j)=nusigmaf(j)*vol(j)*pij(j,i)/vol(i);
+    end
+end
+SQ=eye(n)-SQ;
+tmp=aleig(SQ,FQ,eps);
+f=1/tmp{2};
