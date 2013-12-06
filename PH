@@ -1,0 +1,12 @@
+function [exact, approximated]=PH(muv)
+n=size (muv,2);
+for i=1:n
+    mu=muv(i);
+    if ((mu>=-1)&(mu<0))
+        exact(i)=0;
+        approximated(i)=1/2+mu;
+    elseif ((mu>=0)&(mu<=1))
+        exact(i)=2*mu;
+        approximated(i)=1/2+mu;
+    end 
+end
