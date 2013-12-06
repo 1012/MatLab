@@ -1,0 +1,6 @@
+function f=Lx(n,m,nGauss,track)
+if n==1
+    f=2*track{m,nGauss}{3}(n);
+else
+    f=track{m,nGauss}{3}(n);
+end
