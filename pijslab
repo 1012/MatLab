@@ -1,0 +1,30 @@
+function f=pijslab(sigma,vol,ref,bc)
+n=lenght(vol);
+Lcell=sum(sigma.*vol);
+if strcmp(bc,'void')
+    for i=1:n
+        f(i,i)=1/vol(i)*Rii(i,0,1,sigma,vol,Lcell);
+        for j=i+1:n
+            f(i,j)=1/vol(i)*Rij(i,j,0,1,sigma,vol,Lcell);
+            f(j,i)=vol(i)/vol(j)*f(i,j);
+        end
+    end
+elseif strcmp(bc,'tran')
+    for i=1:n
+        tmp=0;
+        for m=0:ref
+            tmp=tmp+Rii(i,m,1,sigma,vol,Lcell)+Rii(i,m+1,-1,sigma,vol,Lcell);
+        end
+        f(i,j)=1/vol(i)*tmp;
+        for j=1:n
+            tmp=0;
+            for m=0:ref
+                tmp=tmp+Rij(i,j,m,1,sigma,vol,Lcell)+Rij(i,j,m+1,-1,sigma,vol,Lcell);
+            end
+            f(i,j)=1/vol(i)*tmp;
+            f(j,i)=vol(i)/vol(j)*f(i,j);
+        end
+    end
+else
+    error('unknown boundary condition!')
+end
