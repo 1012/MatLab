@@ -1,0 +1,18 @@
+function f=pij_sph(sigma,vol,nGauss,bc)
+r(1)=(3*vol(1)/(4*pi))^(1/3);
+for z=2:length(vol)
+    r(z)=(3*vol(z)/(4*pi)+r(z-1)^3)^(1/3);
+end
+track=sybt1d(r,true,nGauss);
+if strcmp(bc,'void')
+    f=Lij('sph',track,sigma,vol,nGauss);
+elseif strcmp(bc,'white')
+    tmp=Lij('sph',track,sigma,vol,nGauss);
+    PiS=1-tmp*sigma';
+    A=2*pi*r(length(r))^2;
+    pSi=4.*vol'.*PiS/A;
+    PSS=1-pSi'*sigma';
+    f=tmp+1/(1-PSS)*PiS*pSi';
+else
+    error('Unknown boundary condition!');
+end
