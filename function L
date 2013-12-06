@@ -1,0 +1,9 @@
+MatLab
+======
+function f=L(x,y,sigma,vol)
+f=0;
+for i=1:length(sigma)
+    if (i-1/2>=x & i+1/2<=y)
+        f=f+sigma(i)*vol(i);
+    end
+end
