@@ -1,0 +1,13 @@
+function f=tau(i,j,m,nGauss,track,sigma)
+f=0;
+x=i-m+1;
+if i==j
+    for n=1:x-1
+        f=f+sigma(m+n-1)*track{m,nGauss}{3}(n);
+    end
+    f=2*f;            
+elseif j>i
+    for n=1:j-i-1
+        f=f+sigma(i+n)*track{m,nGauss}{3}(x+n);
+    end
+end
