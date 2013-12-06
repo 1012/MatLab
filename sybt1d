@@ -1,0 +1,50 @@
+function f=sybt1d(rad,lgsph,ngauss)
+% produce a Gauss-Jacobi tracking in 1D curvilinear geometry
+% function f=sybt1d(rad,lgsph,ngauss)
+% (c) 2005 Alain Hebert, Ecole Polytechnique de Montreal
+   npij=size(rad,2) ;
+   if ngauss == 1
+      alp=[ 0.6666666667 ] ;
+      pwr=[ 0.5 ] ;
+   elseif ngauss == 2
+      alp=[ 0.3550510257,0.8449489743 ] ;
+      pwr=[ 0.1819586183,0.3180413817 ] ;
+   elseif ngauss == 3
+      alp=[ .2123405382,.5905331356,.9114120405 ] ;
+      pwr=[ .0698269799,.2292411064,.2009319137 ] ;
+   elseif ngauss == 4
+      alp=[ .1397598643,.4164095676,.7231569864,.9428958039 ] ;
+      pwr=[ .0311809710,.1298475476,.2034645680,.1355069134 ] ;
+   elseif ngauss == 5
+      alp=[ .0985350858,.3045357266,.5620251898,.8019865821,.9601901429 ] ;
+      pwr=[ .0157479145,.0739088701,.1463869871,.1671746381,.0967815902 ] ;
+   elseif ngauss == 6
+      alp=[ .0730543287,.2307661380,.4413284812,.6630153097,.8519214003,.9706835728 ] ;
+      pwr=[ .0087383018,.0439551656,.0986611509,.1407925538,.1355424972,.0723103307 ] ;
+   else
+      error('invalid number of Gauss-Jacobi points.')
+   end
+   rik1=0 ;
+   for ik=1:npij
+      rik2=rad(ik) ;
+      rd=rik2-rik1 ;
+      for il=1:ngauss
+         r=rik2-rd*alp(il)^2 ;
+         aux=4*rd*pwr(il) ;
+         if lgsph
+           aux=aux*r*pi ;
+         end
+         ct1=0. ;
+         z=zeros(1,npij-ik+1) ;
+         for i=ik:npij ;
+            ct2=sqrt(rad(i)^2-r^2) ;
+            z(i-ik+1)=ct2-ct1 ;
+            ct1=ct2 ;
+         end
+         cell{1}=aux ;
+         cell{2}=aux*ct2/rad(npij) ;
+         cell{3}=z ;
+         f{ik,il}=cell ;
+      end
+      rik1=rik2 ;
+   end
